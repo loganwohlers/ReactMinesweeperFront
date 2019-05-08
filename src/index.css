@@ -1,0 +1,136 @@
+@import url("https://fonts.googleapis.com/css?family=Gugi");
+
+* {
+  font-family: "Gugi", cursive;
+}
+
+/* GAME MENU */
+
+#chooseDiff {
+  font-size: 40px;
+  margin: 20px;
+}
+
+.diffButtons {
+  display: inline;
+  font-size: 35px;
+  padding: 20px;
+}
+
+.diffButtons:hover {
+  cursor: pointer;
+  font-weight: bolder;
+}
+
+/* LEADERBOARD */
+
+.leaderboard {
+  padding: 10px;
+  margin: 20px;
+  height: auto;
+  display: flex;
+}
+
+#scoreTable {
+  margin: auto;
+  height: auto;
+  width: auto;
+  text-align: center;
+}
+
+#scoreTable td {
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 10px;
+}
+
+.score {
+  flex: 1;
+  text-align: center;
+}
+
+.scoreList {
+  /* padding-inline-start: 100px; */
+  list-style: none;
+  text-align: center;
+}
+
+span {
+  padding: 20px;
+  text-align: left;
+}
+
+#leaderTitle {
+  text-align: center;
+  font-size: 40px;
+  margin-top: 100px;
+  margin-bottom: 10px;
+}
+
+/* GAME */
+
+#infoBar {
+  font-size: 30px;
+  margin-bottom: 50px;
+}
+
+.square {
+  height: 25px;
+  width: 25px;
+  border: 1px;
+  border-style: solid;
+}
+
+.clickedSquare {
+  height: 25px;
+  width: 25px;
+  border: 1px;
+  border-style: solid;
+  background-color: grey;
+}
+
+.unclickedSquare {
+  display: none;
+  height: 25px;
+  width: 25px;
+  border: 1px;
+  border-style: solid;
+}
+
+.flaggedSquare {
+  height: 25px;
+  width: 25px;
+}
+
+.flag {
+  height: 25px;
+  width: 25px;
+}
+
+.mine {
+  height: 25px;
+  width: 25px;
+}
+
+#gameBoard {
+  margin: auto;
+  height: auto;
+  width: auto;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.menu {
+  padding: 10px;
+  margin: 10px;
+  height: auto;
+  text-align: center;
+}
+
+.finalScore {
+  font-size: 30px;
+}
+
+#submitForm {
+  margin: 20px;
+}
