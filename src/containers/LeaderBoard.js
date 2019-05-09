@@ -15,13 +15,11 @@ class LeaderBoard extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
-    this._isMounted ? console.log("MOUNTED!!!") : console.log("NOT MOUNTED?")
     this.getScores()
   }
 
   componentWillUnmount() {
     this._isMounted = false;
-    console.log("UNMOUNTED?")
   }
 
   componentDidUpdate(prevProps) {
