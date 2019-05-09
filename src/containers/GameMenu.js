@@ -16,7 +16,7 @@ class GameMenu extends React.Component {
         return (
             <>
                 <div className='menu'>
-                    <p id='chooseDiff'>Choose Difficulty:</p>
+                    <p id='chooseDiff'>CHOOSE Difficulty:</p>
                     <p className='diffButtons' onClick={this.handleChoice}>Beginner</p>{' '}
                     <p className='diffButtons' onClick={this.handleChoice}>Intermediate</p>{' '}
                     <p className='diffButtons' onClick={this.handleChoice}>Difficult</p>
