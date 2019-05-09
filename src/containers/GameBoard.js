@@ -213,6 +213,7 @@ class GameBoard extends React.Component {
     this.setState({
       gameOver: false,
       activeTimer: true,
+      won: false
     }, () => {
       this.determineBoard(difficulty)
     })

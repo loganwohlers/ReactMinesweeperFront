@@ -9,7 +9,8 @@ class LeaderBoard extends React.Component {
     this.state = {
       beginner: [],
       intermediate: [],
-      difficult: []
+      difficult: [],
+      times: 0
     }
   }
 
@@ -23,16 +24,15 @@ class LeaderBoard extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.newScore) {
+    //prevent infinite loop
+    if (prevProps.newScore && this.props.newScore && this.state.times === 0) {
+      this.setState({ times: 1 })
       this.getScores();
     }
   }
 
-
-
-
   getScores = () => {
-
+    console.log("infinite loop?")
     fetch('https://react-minesweeper-backend.herokuapp.com/games', {
       method: "GET",
       headers: {
