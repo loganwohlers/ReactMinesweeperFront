@@ -36,13 +36,14 @@ class LeaderBoard extends React.Component {
       scoreLevels[score.difficulty.toLowerCase()].push(score)
     })
 
+
+    //slicing to limit to top 10 scores of each category
     this.setState({
-      beginner: scoreLevels.beginner,
-      intermediate: scoreLevels.intermediate,
-      difficult: scoreLevels.difficult
+      beginner: scoreLevels.beginner.slice(0, 10),
+      intermediate: scoreLevels.intermediate.slice(0, 10),
+      difficult: scoreLevels.difficult.slice(0, 10)
     })
   }
-
 
 
   render() {
