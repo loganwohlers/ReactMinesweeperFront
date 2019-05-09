@@ -8,9 +8,7 @@ Link to Site on Heroku: https://react-minesweeper-app.herokuapp.com/
 
 Built With
 
-React
-
-Ruby on Rails
+React / Ruby on Rails
 
 Authors
 
