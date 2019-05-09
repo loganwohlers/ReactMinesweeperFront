@@ -1,4 +1,5 @@
 import React from 'react'
+import LeaderBoard from '../containers/LeaderBoard';
 
 class SaveScore extends React.Component {
   constructor(props) {
@@ -70,6 +71,7 @@ class SaveScore extends React.Component {
             <br />
             <br />
             Score Submitted!
+            <LeaderBoard newScore={true} />
           </div>}
       </div>
 

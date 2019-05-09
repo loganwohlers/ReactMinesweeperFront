@@ -1,6 +1,8 @@
 import React from 'react';
 import GameBoard from './containers/GameBoard'
 import GameMenu from './containers/GameMenu'
+import LeaderBoard from './containers/LeaderBoard'
+
 
 class App extends React.Component {
   constructor() {
@@ -21,9 +23,13 @@ class App extends React.Component {
         {this.state.difficulty ?
           <GameBoard difficulty={this.state.difficulty} />
           :
-          <GameMenu
-          difficulty={this.state.difficulty}
-          handleClick={this.handleDifficultyClick} />}
+          <>
+            <GameMenu
+              difficulty={this.state.difficulty}
+              handleClick={this.handleDifficultyClick} />
+            <LeaderBoard />
+          </>
+        }
       </div>
     )
   }

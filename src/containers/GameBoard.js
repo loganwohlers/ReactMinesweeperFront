@@ -272,12 +272,16 @@ class GameBoard extends React.Component {
           </tbody>
         </table>
         {this.state.gameOver ?
-          <NewGameMenu
-            won={this.state.won}
-            difficulty={this.state.difficulty}
-            restart={this.restartGame}
-            time={this.state.time} />
+          <>
+            <NewGameMenu
+              won={this.state.won}
+              difficulty={this.state.difficulty}
+              restart={this.restartGame}
+              time={this.state.time}
+            />
+          </>
           : null}
+
       </div>
     )
 

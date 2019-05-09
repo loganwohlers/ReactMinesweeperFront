@@ -1,5 +1,4 @@
 import React from 'react'
-import LeaderBoard from './LeaderBoard'
 
 class GameMenu extends React.Component {
     constructor(props) {
@@ -22,7 +21,7 @@ class GameMenu extends React.Component {
                     <p className='diffButtons' onClick={this.handleChoice}>Intermediate</p>{' '}
                     <p className='diffButtons' onClick={this.handleChoice}>Difficult</p>
                 </div>
-                <LeaderBoard />
+
             </>
         )
     }
