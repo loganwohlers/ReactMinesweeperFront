@@ -30,8 +30,8 @@ class GameBoard extends React.Component {
       newGrid = Array(22).fill().map(() => new Array(22).fill(0))
       mines = 99
     } else {
-      newGrid = Array(9).fill().map(() => new Array(9).fill(0))
-      mines = 10
+      newGrid = Array(3).fill().map(() => new Array(3).fill(0))
+      mines = 1
     }
 
     this.setState({

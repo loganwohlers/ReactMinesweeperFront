@@ -12,17 +12,17 @@ class LeaderBoard extends React.Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:3000/games', {
+    fetch('https://react-minesweeper-backend.herokuapp.com/games', {
       method: "GET",
       headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
+        "Content-Type": "application/json",
+        "Accept": "application/json"
       }
     })
-    .then((res) => res.json())
-    .then(scores => {
-      this.setScoresState(scores)
-    })
+      .then((res) => res.json())
+      .then(scores => {
+        this.setScoresState(scores)
+      })
   }
 
   setScoresState = (scores) => {
