@@ -110,25 +110,27 @@ class GameBoard extends React.Component {
   //breadth first search to "click" all suitable 0 tiles and reveal all suitable # tiles
   handleSquareClick = (coords) => {
     if (!this.state.gameOver) {
-      let currentValue = this.state.grid[coords[0]][coords[1]]
+      let currentValue = this.state.grid[coords[0]][coords[1]] + ''
       let newGrid;
       // bomb click
-      if (currentValue === 'b') {
-        this.setState({
-          gameOver: true,
-          activeTimer: false
-        })
-        return null;
+      if (!currentValue.includes('F')) {
+        if (currentValue === 'b') {
+          this.setState({
+            gameOver: true,
+            activeTimer: false
+          })
+          return null;
 
-        // empty square click
-      } else if (currentValue === 0) {
-        newGrid = this.handleZeroSquareClick(coords)
-        // number square click
-      } else {
-        newGrid = [...this.state.grid]
-        newGrid[coords[0]][coords[1]] = currentValue + "*"
+          // empty square click
+        } else if (currentValue === '0') {
+          newGrid = this.handleZeroSquareClick(coords)
+          // number square click
+        } else {
+          newGrid = [...this.state.grid]
+          newGrid[coords[0]][coords[1]] = currentValue + "*"
+        }
+        this.setState({ grid: newGrid }, () => this.winCheck())
       }
-      this.setState({ grid: newGrid }, () => this.winCheck())
     }
   }
 
