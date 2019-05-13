@@ -71,7 +71,7 @@ class SaveScore extends React.Component {
             <br />
             <br />
             Score Submitted!
-            <LeaderBoard newScore={true} />
+          <LeaderBoard newScore={true} />
           </div>}
       </div>
 
