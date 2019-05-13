@@ -160,53 +160,53 @@ class GameBoard extends React.Component {
 
   //this used to be handlezerosquareclick
   processNonMineClick = (coords) => {
-   let copyGrid = [...this.state.grid]
-   let revealed = this.state.revealed
-   let visited = {}
-   let queue = [coords];
+    let copyGrid = [...this.state.grid]
+    let revealed = this.state.revealed
+    let visited = {}
+    let queue = [coords];
 
-   //now only checks each coordinate once
-   while (queue.length > 0) {
-     let currCoords = queue.pop();
-     let currTile = copyGrid[currCoords[0]][currCoords[1]]
-     if (!currTile.isFlagged && !visited[currCoords]) {
-       visited[currCoords] = true;
-       currTile.isRevealed = true;
-       revealed--;
-       if (currTile.adjacentCount === 0) {
-         //grab all possibile neighboring tiles
-         let poss = this.generatePossibilities(currCoords[0], currCoords[1])
-         poss.forEach(neighbor => {
-           if (!visited[neighbor]) {
-             queue.push(neighbor);
-           }
-         })
-       }
-     }
-   }
-   this.setState({
-     grid: copyGrid,
-     revealed
-   }
-     , () => this.winCheck())
+    //now only checks each coordinate once
+    while (queue.length > 0) {
+      let currCoords = queue.pop();
+      let currTile = copyGrid[currCoords[0]][currCoords[1]];
+      if (!currTile.isFlagged && !visited[currCoords]) {
+        visited[currCoords] = true;
+        currTile.isRevealed = true;
+        revealed--;
+        if (currTile.adjacentCount === 0) {
+          //grab all possibile neighboring tiles
+          let poss = this.generatePossibilities(currCoords[0], currCoords[1])
+          poss.forEach(neighbor => {
+            if (!visited[neighbor]) {
+              queue.push(neighbor);
+            }
+          })
+        }
+      }
+    }
+    this.setState({
+      grid: copyGrid,
+      revealed
+    }
+      , () => this.winCheck())
   }
 
   handleFlagClick = (e, coords) => {
-     if (!this.state.gameOver) {
-       let mines = this.state.mines
+    if (!this.state.gameOver) {
+      let mines = this.state.mines
 
-       let copyGrid = [...this.state.grid];
-       let currTile = copyGrid[coords[0]][coords[1]];
+      let copyGrid = [...this.state.grid];
+      let currTile = copyGrid[coords[0]][coords[1]];
 
-       currTile.isFlagged = !currTile.isFlagged
-       currTile.isFlagged ? mines-- : mines++;
+      currTile.isFlagged = !currTile.isFlagged
+      currTile.isFlagged ? mines-- : mines++;
 
-       this.setState({
-         grid: copyGrid,
-         mines
-       }, () => this.winCheck()
-       )
-     }
+      this.setState({
+        grid: copyGrid,
+        mines
+      }, () => this.winCheck()
+      )
+    }
    }
 
    winCheck = () => {
