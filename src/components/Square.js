@@ -18,7 +18,7 @@ class Square extends React.Component {
     determineCSS() {
         if (this.props.flagged) {
             return 'flaggedSquare'
-        } else if (this.props.revealed || (this.props.gameOver && this.props.data === 'b')) {
+        } else if (this.props.revealed || (this.props.gameOver && this.props.data === -1)) {
             return 'clickedSquare'
         } else {
             return 'unclickedSquare'
@@ -28,7 +28,7 @@ class Square extends React.Component {
     determineContent() {
         if (this.props.flagged) {
             return <img className='flag' src={flag} alt='' />
-        } else if (this.props.gameOver && this.props.data === 'b') {
+        } else if (this.props.gameOver && this.props.data === -1) {
             return <img className='mine' src={mine} alt='' />
         } else {
             return this.props.data

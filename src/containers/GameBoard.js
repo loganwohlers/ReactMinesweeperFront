@@ -142,106 +142,80 @@ class GameBoard extends React.Component {
   //breadth first search to "click" all suitable 0 tiles and reveal all suitable # tiles
   handleSquareClick = (coords) => {
     if (!this.state.gameOver) {
-      let currentValue = this.state.grid[coords[0]][coords[1]] + ''
-      let newGrid;
+      let currentTile = this.state.grid[coords[0]][coords[1]]
       // bomb click
-      if (!currentValue.includes('F')) {
-        if (currentValue === 'b') {
+      if (currentTile.isClickable()) {
+        if (currentTile.isBomb) {
+          currentTile.isRevealed = true;
           this.setState({
             gameOver: true,
             activeTimer: false
           })
-          return null;
-
-          // empty square click
-        } else if (currentValue === '0') {
-          newGrid = this.handleZeroSquareClick(coords)
-          // number square click
         } else {
-          newGrid = [...this.state.grid]
-          newGrid[coords[0]][coords[1]] = currentValue + "*"
+          this.processNonMineClick(coords)
         }
-        this.setState({ grid: newGrid }, () => this.winCheck())
       }
     }
   }
 
-  //this whole method needs to be cleaned up a bit
-  handleZeroSquareClick = (coords) => {
-    let copyGrid = [...this.state.grid]
-    let visited = {}
-    visited[coords] = true
-    let queue = [coords]
+  //this used to be handlezerosquareclick
+  processNonMineClick = (coords) => {
+   let copyGrid = [...this.state.grid]
+   let revealed = this.state.revealed
+   let visited = {}
+   let queue = [coords];
 
-    while (queue.length > 0) {
-      let current = queue.pop()
-
-      if (copyGrid[current[0]][current[1]] === 0) {
-        // grid shows first character - need blank space
-        copyGrid[current[0]][current[1]] = ' *'
-      }
-
-      //grab all possibile neighboring tiles
-      let poss = this.generatePossibilities(current[0], current[1])
-
-      // filter possibilities for number tile and reveal them
-      let neighborNums = poss.filter(n => copyGrid[n[0]][n[1]] !== 0)
-      neighborNums.forEach(ss => {
-        let currValue = copyGrid[ss[0]][ss[1]]
-        // * is revealed
-        copyGrid[ss[0]][ss[1]] = currValue + "*"
-      })
-
-      //filter for suitable 0/blank tiles and visit them on search
-      let neighborBlanks = poss.filter(n => copyGrid[n[0]][n[1]] === 0)
-      for (let i = 0; i < neighborBlanks.length; i++) {
-        if (!visited[neighborBlanks[i]]) {
-          queue.push(neighborBlanks[i])
-          visited[neighborBlanks[i]] = true
-        }
-      }
-    }
-    return copyGrid;
+   //now only checks each coordinate once
+   while (queue.length > 0) {
+     let currCoords = queue.pop();
+     let currTile = copyGrid[currCoords[0]][currCoords[1]]
+     if (!currTile.isFlagged && !visited[currCoords]) {
+       visited[currCoords] = true;
+       currTile.isRevealed = true;
+       revealed--;
+       if (currTile.adjacentCount === 0) {
+         //grab all possibile neighboring tiles
+         let poss = this.generatePossibilities(currCoords[0], currCoords[1])
+         poss.forEach(neighbor => {
+           if (!visited[neighbor]) {
+             queue.push(neighbor);
+           }
+         })
+       }
+     }
+   }
+   this.setState({
+     grid: copyGrid,
+     revealed
+   }
+     , () => this.winCheck())
   }
 
   handleFlagClick = (e, coords) => {
-    if (!this.state.gameOver) {
-      let mines = this.state.mines
-      let copyGrid = [...this.state.grid];
-      let stringValue = copyGrid[coords[0]][coords[1]] + '';
-      //remove flag
-      if (stringValue.includes('F')) {
-        mines++;
-        copyGrid[coords[0]][coords[1]] = stringValue.slice(0, 1)
-        //adding flag
-      } else {
-        mines--;
-        copyGrid[coords[0]][coords[1]] += 'F'
-      }
+     if (!this.state.gameOver) {
+       let mines = this.state.mines
 
-      this.setState({
-        grid: copyGrid,
-        mines
-      }, () => this.winCheck()
-      )
-    }
-  }
+       let copyGrid = [...this.state.grid];
+       let currTile = copyGrid[coords[0]][coords[1]];
 
-  winCheck = () => {
-    if (this.state.mines === 0) {
-      for (let i = 0; i < this.state.grid.length; i++) {
-        for (let j = 0; j < this.state.grid.length; j++) {
-          let currValue = this.state.grid[i][j] + ''
-          if (!(currValue.includes('*') || currValue === 'bF')) {
-            return false
-          }
-        }
+       currTile.isFlagged = !currTile.isFlagged
+       currTile.isFlagged ? mines-- : mines++;
+
+       this.setState({
+         grid: copyGrid,
+         mines
+       }, () => this.winCheck()
+       )
+     }
+   }
+
+   winCheck = () => {
+      if (this.state.mines === 0 && this.state.revealed === 0) {
+        this.setState({ activeTimer: false, gameOver: true, won: true })
+        return true
       }
-      this.setState({ activeTimer: false, gameOver: true, won: true })
-      return true
+      return false;
     }
-    return false;
-  }
 
   restartGame = (difficulty) => {
     this.setState({
@@ -266,17 +240,13 @@ class GameBoard extends React.Component {
       return (
         <tr key={"row" + i}>
           {row.map((col, j) => {
-            let revealed = false;
-            let flagged = false;
-            let currentValue = this.state.grid[i][j].toString()
-            currentValue.includes('*') ? revealed = true : revealed = false
-            currentValue.includes('F') ? flagged = true : flagged = false
+            let currTile = this.state.grid[i][j];
             return (
               <Square
                 key={i + ":" + j}
-                revealed={revealed}
-                data={currentValue.charAt(0)}
-                flagged={flagged}
+                revealed={currTile.isRevealed}
+                data={currTile.adjacentCount === 0 ? '' : currTile.adjacentCount}
+                flagged={currTile.isFlagged}
                 gameOver={this.state.gameOver}
                 coords={[i, j]}
                 handleSquareClick={this.handleSquareClick}
