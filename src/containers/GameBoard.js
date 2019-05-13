@@ -3,16 +3,33 @@ import Square from '../components/Square'
 import GameInfoBar from '../components/GameInfoBar'
 import NewGameMenu from '../components/NewGameMenu'
 
+class GameTile {
+ constructor() {
+   this.isFlagged = false;
+   this.isRevealed = false;
+   this.isBomb = false;
+   this.adjacentCount = -1;
+ }
+
+ isClickable() {
+   return !this.isFlagged && !this.isRevealed;
+ }
+}
+
 class GameBoard extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       grid: [],
       mines: 0,
+      revealed: 0,
+
       gameOver: false,
       won: false,
+
       time: 0,
       activeTimer: false,
+
       difficulty: ''
     }
   }
@@ -23,25 +40,40 @@ class GameBoard extends React.Component {
 
   determineBoard = (difficulty) => {
     let newGrid, mines;
+
     if (difficulty === "intermediate") {
-      newGrid = Array(16).fill().map(() => new Array(16).fill(0))
+      newGrid = this.makeGrid(16)
       mines = 40
     } else if (difficulty === "difficult") {
-      newGrid = Array(22).fill().map(() => new Array(22).fill(0))
+      newGrid = this.makeGrid(22)
       mines = 99
     } else {
-      newGrid = Array(9).fill().map(() => new Array(9).fill(0))
+      newGrid = this.makeGrid(9)
       mines = 10
     }
 
+    let gridArea = Math.pow(newGrid.length, 2)
     this.setState({
       grid: newGrid,
       mines,
       activeTimer: true,
-      difficulty
+      difficulty,
+      revealed: gridArea - mines
     }, () => {
       this.randomMines()
     })
+  }
+
+  makeGrid(num) {
+    let grid = new Array(num)
+
+    for (let i = 0; i < grid.length; i++) {
+      grid[i] = new Array(num)
+      for (let j = 0; j < grid.length; j++) {
+        grid[i][j] = new GameTile()
+      }
+    }
+    return grid
   }
 
   randomMines() {
@@ -51,8 +83,8 @@ class GameBoard extends React.Component {
     while (mines < this.state.mines) {
       let x = Math.floor(Math.random() * this.state.grid.length)
       let y = Math.floor(Math.random() * this.state.grid.length)
-      if (copyGrid[x][y] === 0) {
-        copyGrid[x][y] = 'b'
+      if (!copyGrid[x][y].isBomb) {
+        copyGrid[x][y].isBomb = true;
         mines++
       }
     }
@@ -64,8 +96,8 @@ class GameBoard extends React.Component {
     let copyGrid = [...this.state.grid]
     for (var i = 0; i < copyGrid.length; i++) {
       for (var j = 0; j < copyGrid.length; j++) {
-        if (copyGrid[i][j] !== 'b') {
-          copyGrid[i][j] = this.neighborMines(i, j, copyGrid)
+        if (!copyGrid[i][j].isBomb) {
+          copyGrid[i][j].adjacentCount = this.neighborMines(i, j, copyGrid)
         }
       }
     }
@@ -79,8 +111,8 @@ class GameBoard extends React.Component {
     for (var i = 0; i < poss.length; i++) {
       let xx = poss[i][0]
       let yy = poss[i][1]
-      let coords = (copyGrid[xx][yy])
-      if (coords === 'b') {
+      let currTile = (copyGrid[xx][yy])
+      if (currTile.isBomb) {
         bombCount++
       }
     }
