@@ -168,11 +168,16 @@ class GameBoard extends React.Component {
     //now only checks each coordinate once
     while (queue.length > 0) {
       let currCoords = queue.pop();
+      console.log(currCoords);
       let currTile = copyGrid[currCoords[0]][currCoords[1]];
+      // something's wrong here...
       if (!currTile.isFlagged && !visited[currCoords]) {
         visited[currCoords] = true;
-        currTile.isRevealed = true;
-        revealed--;
+        if (!currTile.isRevealed) {
+          currTile.isRevealed = true;
+          revealed--;
+          
+        }
         if (currTile.adjacentCount === 0) {
           //grab all possibile neighboring tiles
           let poss = this.generatePossibilities(currCoords[0], currCoords[1])

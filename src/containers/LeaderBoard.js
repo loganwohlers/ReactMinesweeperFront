@@ -32,7 +32,6 @@ class LeaderBoard extends React.Component {
   }
 
   getScores = () => {
-    console.log("infinite loop?")
     fetch('https://react-minesweeper-backend.herokuapp.com/games', {
       method: "GET",
       headers: {
@@ -89,4 +88,3 @@ class LeaderBoard extends React.Component {
 }
 
 export default LeaderBoard
-
