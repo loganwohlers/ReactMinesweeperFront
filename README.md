@@ -4,7 +4,7 @@ Minesweeper clone built in React- utilizing state to represent game boards. User
 
 ### How It Works
 The heavy-lifting of the game is done through a GameBoard React component that contains a two-dimensional array as state to represent a grid of tiles with X,Y coordinates (ie grid[0][0] represents the top left tile on the board)  In addition the state keeps track of various high level game information to determine whether a game is won or lost:
-
+```
 class GameBoard extends React.Component {
   constructor(props) {
     super(props)
@@ -23,6 +23,7 @@ class GameBoard extends React.Component {
   componentDidMount() {
     this.determineBoard(this.props.difficulty) //where the intial board/grid is set up- sized corresponds to difficulty
   }
+ ```
   
 ___________________________________
 
@@ -41,7 +42,7 @@ class GameTile {
 }
 
 Once the size has been determined- a few callback functions are executed that go through and 'seed' the grid before the game can begin.  First random X,Y coordinates are generated- and then set the isBomb of the GameTile at that coordinate to true.  This process is repeated until the all the mines for that diffculty have been placed.  Once the mines are seeded- the array is then iterated through- with each tile checking all its possible surrounding tiles and incrementing its adjacentCount for each mine found. 
-
+```
   generatePossibilities(x, y) {
     let all = [
       [x - 1, y - 1],
@@ -59,12 +60,14 @@ Once the size has been determined- a few callback functions are executed that go
       return (xx >= 0 && yy >= 0 && xx < this.state.grid.length && yy < this.state.grid.length)
     })
   }
+ ```
 
 As a last step- the Gameboard has it's state values for mines and revealed set.  Revealed is equal to the size of the grid minus the number of mines.  This is how the core logic of whether or not a game is won is set up-- A game is only won when the number of mines left is 0 AND the number of tiles left to reveal is 0.
 
 The wincheck function that runs on user clicks:
 Note that flagging a tile reduces the mine count and revealing a tile reduces the revealed count.  If these are both 0 then the game is won and the timer is stopped.
 
+```
    winCheck = () => {
       if (this.state.mines === 0 && this.state.revealed === 0) {
         this.setState({ activeTimer: false, gameOver: true, won: true })
@@ -72,6 +75,7 @@ Note that flagging a tile reduces the mine count and revealing a tile reduces th
       }
       return false;
     }
+```
 
 -- With this the game board is fully seeded and ready to play.
 
@@ -79,14 +83,44 @@ Note that flagging a tile reduces the mine count and revealing a tile reduces th
   
  The final aspect to highlight is the actual logic of what happens when a user clicks/interacts with a tile.  
  
+ ```
   processNonMineClick = (coords) => {
     let copyGrid = [...this.state.grid]
     let revealed = this.state.revealed
     let visited = {}
     let queue = [coords];
+    
+   while (queue.length > 0) {
+      let currCoords = queue.pop();
+      console.log(currCoords);
+      let currTile = copyGrid[currCoords[0]][currCoords[1]];
+      // something's wrong here...
+      if (!currTile.isFlagged && !visited[currCoords]) {
+        visited[currCoords] = true;
+        if (!currTile.isRevealed) {
+          currTile.isRevealed = true;
+          revealed--;
+          
+        }
+        if (currTile.adjacentCount === 0) {
+          //grab all possibile neighboring tiles
+          let poss = this.generatePossibilities(currCoords[0], currCoords[1])
+          poss.forEach(neighbor => {
+            if (!visited[neighbor]) {
+              queue.push(neighbor);
+            }
+          })
+        }
+      }
+    }
+    this.setState({
+      grid: copyGrid,
+      revealed
+    }
+      , () => this.winCheck())
+  }
 
-   
-
+```
 
 
 
