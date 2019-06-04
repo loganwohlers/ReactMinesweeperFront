@@ -128,4 +128,4 @@ Note that flagging a tile reduces the mine count and revealing a tile reduces th
 
 ### Authors
 
-Built by Claire Muller and Logan Wohlers as part of the Flatiron School's fourth module.
+Built by Claire Muller and Logan Wohlers 
